@@ -11,7 +11,7 @@ export interface IRestaurant extends Document {
     reviewCount: number;
     location: string;
     address: string;
-    images: string;
+    image: string;
     chef: string;
     tags: string[];
     availableSlots: string[];
@@ -35,7 +35,7 @@ const RestaurantSchema = new Schema<IRestaurant>(
         reviewCount: { type: Number, default: 0 },
         location: { type: String, required: true, trim: true },
         address: { type: String, required: true, trim: true },
-        images: { type: String, default:"" },
+        image: { type: String, default:"" },
         chef: { type: String, required: true, trim: true },
         tags: [{ type: String }],
         availableSlots: [{ type: String, required: true }],
