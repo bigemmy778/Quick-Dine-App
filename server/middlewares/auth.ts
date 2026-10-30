@@ -1,6 +1,6 @@
 
 import { Request, Response, NextFunction } from "express";
-import * as jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { IUser, User } from "../models/User.js";
 
  export interface AuthRequest extends Request{
@@ -31,12 +31,15 @@ import { IUser, User } from "../models/User.js";
             next() // execute controller using next()
         } catch  (error) {
             console.error("Auth Middleware Error:", error);
+            res.status(401).json({ message: "Not authorized, token failed" });
         }
     }
     if(!token){
         res.status(401).json({ message: "Not authorized, no token" });
     }
  }
+
+
 
 //middle ware to check if user is admin and protect admin routes
  export const adminOnly = (req: AuthRequest, res: Response, next: NextFunction): void => {
