@@ -39,7 +39,7 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
             name,
             email,
             password: hashedPassword,
-            phone,
+            phone: phone?.trim() || undefined,
             role,
         })
 

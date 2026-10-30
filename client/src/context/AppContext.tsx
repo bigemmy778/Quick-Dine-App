@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { dummyUser } from "../assets/assets.js";
+import api from "../lib/api.js";
+import toast from "react-hot-toast";
 
 interface UserType {
     _id: string;
@@ -36,39 +37,92 @@ export const AppContextProvider = ({ children }: Props) => {
     const [isAuthModalOpen, setAuthModalOpen] = useState<boolean>(false);
 
     const login = async (email: string, password: string): Promise<boolean> => {
-        console.log(email, password);
-        setToken(dummyUser.token);
-        setUser(dummyUser as any);
-        setToken(dummyUser.token);
-        localStorage.setItem("token", dummyUser.token);
-        return true;
-    };
+      try {
+        setLoading(true);
+        //api from lib folder
+        const res = await api.post("/auth/login", {email, password});
+        const {token: userToken, ...userData} = res.data;
 
+        localStorage.setItem("token", userToken)
+        setToken(userToken)
+        setUser(userData)
+        toast.success(`Welcome back, ${userData.name}`)
+        return true; 
+      } catch (error: any) {
+          toast.error(error?.response?.data?.message || error?.message);
+          return false; 
+      }finally{
+        setLoading(false);
+      }
+    };
+    
     const register = async (name: string, email: string, password: string, phone?: string, role?: string): Promise<boolean> => {
-        console.log(name, email, password, phone, role);
-        setToken(dummyUser.token);
-        setUser(dummyUser as any);
-        setToken(dummyUser.token);
-        localStorage.setItem("token", dummyUser.token);
-        return true;
+        try {
+            setLoading(true);
+            //api from lib folder
+            const res = await api.post("/auth/register", {name, email, password, phone, role});
+
+            const {token: userToken, ...userData} = res.data; //extract user token and user data from the response.data
+    
+            localStorage.setItem("token", userToken)
+            setToken(userToken)
+            setUser(userData)
+            toast.success(`Welcome to QuickDine Club!`)
+            return true; 
+          } catch (error: any) {
+              toast.error(error?.response?.data?.message || error?.message);
+              return false; 
+          }finally{
+            setLoading(false);
+          }
     };
 
     const logout = () => {
+        //clear the local storage using remove items
         localStorage.removeItem("token");
         setToken(null);
         setUser(null);
         window.location.href = "/";
     };
 
+
     useEffect(() => {
         const loadUser = async () => {
-            if (token) {
-                setUser(dummyUser as any);
+          if (!token) { setLoading(false); return; }
+          try {
+            const res = await api.post("/auth/me"); // or post, matching your route
+            setUser(res.data);
+          } catch (error: any) {
+            if (error?.response?.status === 401) {
+              localStorage.removeItem("token");
+              setToken(null);
+              setUser(null);
             }
+            // other errors (network, 500): keep the session
+          } finally {
             setLoading(false);
+          }
         };
         loadUser();
-    }, [token]);
+      }, []); // run once on app load, not on every token change
+
+
+
+    // useEffect(() => {
+    //     const loadUser = async () => {
+    //         if (token) {
+    //             try{
+    //                 const res = await api.post("/auth/me")
+    //                 setUser(res.data)
+    //             } catch (error) {
+    //                 toast.error(error?.response?.data?.message || error?.message);
+    //                 logout()
+    //             }
+    //         }
+    //         setLoading(false);
+    //     };
+    //     loadUser();
+    // }, [token]);
 
     const value: AppContextType = {
         user,
