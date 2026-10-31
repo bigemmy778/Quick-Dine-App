@@ -10,6 +10,7 @@ import MembershipSection from "../components/home/MembershipSection.tsx";
 import NewsletterCTA from "../components/home/NewsletterCTA.tsx";
 import toast from "react-hot-toast";
 import api from "../lib/api.ts";
+import { getErrorMessage } from "../lib/api.ts";
 
 export default function Home() {
     const [trending, setTrending] = useState<any[]>([]);
@@ -21,7 +22,7 @@ export default function Home() {
                 const res = await api.get('/restaurants/featured')
                 setTrending(res.data)
             } catch (error) {
-                 toast.error(error?.response?.data?.message || error?.message);
+                toast.error(getErrorMessage(error, "Failed to load restaurant data"));
             }finally{
                 setLoading(false)
             }

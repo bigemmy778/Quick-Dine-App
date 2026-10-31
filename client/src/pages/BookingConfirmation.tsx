@@ -11,6 +11,7 @@ import BookingSuccess from "../components/booking/BookingSuccess.tsx";
 import BookingSummary from "../components/booking/BookingSummary.tsx";
 import BookingForm from "../components/booking/BookingForm.tsx";
 import api from "../lib/api.ts";
+import { getErrorMessage } from "../lib/api.ts";
 
 
 export default function BookingConfirmation() {
@@ -54,7 +55,7 @@ export default function BookingConfirmation() {
                const res = await api.get(`/restaurants/${slug}`)
                setRestaurant(res.data)
            }catch (error) {
-             toast.error(error?.response?.data?.message || error?.message);
+            toast.error(getErrorMessage(error, "Failed to load restaurant data"));
              navigate("/");
            }finally{
                 setLoading(false);
