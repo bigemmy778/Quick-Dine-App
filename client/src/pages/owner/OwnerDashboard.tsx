@@ -12,6 +12,7 @@ import OwnerBookings from "../../components/owner/OwnerBookings.tsx";
 import OwnerProfileDetails from "../../components/owner/OwnerProfileDetails.tsx";
 import api from "../../lib/api.ts";
 import toast from "react-hot-toast";
+import { getErrorMessage } from "../../lib/api.ts";
 
 export default function OwnerDashboard() {
     const { logout } = useAppContext();
@@ -35,7 +36,7 @@ export default function OwnerDashboard() {
            }
         }
      } catch (error){
-       toast.error(error?.response.data?.message || "Failed to load dashboard data");
+        toast.error(getErrorMessage(error, "Failed to load restaurant data"));
      } finally{
         setLoading(false)
      }
