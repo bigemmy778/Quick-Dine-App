@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, MapPin, Calendar, Users } from "lucide-react";
 import { assets } from "../../assets/assets";
+import homeImg from '../../assets/home-image.jpg'
 
 export default function Hero() {
     const navigate = useNavigate();
@@ -27,7 +28,7 @@ export default function Hero() {
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
             {/* Background Image */}
             <div className="absolute inset-0 z-0">
-                <img alt="Elegant Dining Room" className="w-full h-full object-cover brightness-70" src={assets.hero_bg_img} />
+                <img alt="Elegant Dining Room" className="w-full h-full object-cover brightness-70" src={homeImg} />
                 <div className="absolute inset-0 bg-black/30"></div>
             </div>
 
