@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, MapPin, Calendar, Users } from "lucide-react";
-import { assets } from "../../assets/assets";
 import homeImg from '../../assets/home-image.jpg'
 
 export default function Hero() {
