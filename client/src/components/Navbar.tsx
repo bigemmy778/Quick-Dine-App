@@ -45,8 +45,13 @@ export default function Navbar() {
                 {/* Logo */}
                 <div className="flex items-center gap-12">
                     <Link to="/">
-                        <img src={logo} alt="Logo" className={`h-8 w-auto max-w-[140px] object-contain shrink-0 sm:h-14 sm:max-w-[160px] md:h-14 md:max-w-[180px] lg:h-16 lg:max-w-[200px] ${scrolled || location.pathname === "/" ? "invert" : ""
-                            }`} />
+                        <img src={logo} alt="Logo" 
+                        className={`h-8 w-auto max-w-[140px] object-contain shrink-0 transition-[filter] duration-300 sm:h-18 sm:max-w-[160px] md:h-15 md:max-w-[180px] lg:h-16 lg:max-w-[200px] ${
+                            location.pathname === "/" && !scrolled ? "brightness-0 invert" : ""
+                        }`}
+                        // className={`h-8 w-auto max-w-[140px] object-contain shrink-0 sm:h-18 sm:max-w-[160px] md:h-15 md:max-w-[180px] lg:h-16 lg:max-w-[200px] ${scrolled || location.pathname === "/" ? "invert" : ""
+                        //     }`} 
+                        />
                     </Link>
 
                     {/* Desktop Navigation Links */}
