@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
+import { verifyEmailConnection } from "./config/sendEmail.js";
 import express, { Request, Response,  NextFunction } from 'express';
 import cors from "cors";
 import connectDB from "./config/db.js";
@@ -14,6 +15,11 @@ const app = express();
 
 //connect to MongoDB
 await connectDB() 
+
+verifyEmailConnection()
+    .catch((error) => {
+        console.error("Brevo SMTP connection failed:", error);
+    });
 
 // Middleware
 app.use(cors())

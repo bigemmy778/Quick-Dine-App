@@ -8,11 +8,13 @@ import OwnerDashboard from "./pages/owner/OwnerDashboard.tsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
 import ProtectedRoute from "./components/ProtectedRoute.tsx";
 import { Toaster } from "react-hot-toast";
+import ResetPassword from "./pages/ResetPassword.tsx";
+
 
 export default function App() {
     return (
         <>
-            <Toaster 
+            <Toaster
                 position="bottom-right"
                 toastOptions={{
                     style: {
@@ -29,38 +31,40 @@ export default function App() {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/search" element={<Search />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/reset-password/:token" element={<ResetPassword />} />
                 <Route path="/restaurant/:slug" element={<RestaurantDetail />} />
-                <Route 
-                    path="/booking/:slug" 
+                <Route
+                    path="/booking/:slug"
                     element={
                         <ProtectedRoute>
                             <BookingConfirmation />
                         </ProtectedRoute>
-                    } 
+                    }
                 />
-                <Route 
-                    path="/dashboard" 
+                <Route
+                    path="/dashboard"
                     element={
                         <ProtectedRoute>
                             <Dashboard />
                         </ProtectedRoute>
-                    } 
+                    }
                 />
-                <Route 
-                    path="/owner/dashboard" 
+                <Route
+                    path="/owner/dashboard"
                     element={
                         <ProtectedRoute allowedRoles={["owner"]}>
                             <OwnerDashboard />
                         </ProtectedRoute>
-                    } 
+                    }
                 />
-                <Route 
-                    path="/admin/dashboard" 
+                <Route
+                    path="/admin/dashboard"
                     element={
                         <ProtectedRoute allowedRoles={["admin"]}>
                             <AdminDashboard />
                         </ProtectedRoute>
-                    } 
+                    }
                 />
             </Routes>
         </>
