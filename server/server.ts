@@ -21,17 +21,22 @@ verifyEmailConnection()
         console.error("Brevo SMTP connection failed:", error);
     });
 
-// Middleware
-const allowedOrigins = [process.env.CLIENT_URL, "http://localhost:5173"]
-    .filter(Boolean)
-    .map((o) => (o as string).replace(/\/+$/, ""));
+// Middleware  
+
+//cors && allowed origin
+const allowedOrigins = (process.env.CLIENT_URL ?? "")
+    .split(",")
+    .concat("http://localhost:5173")
+    .map((o) => o.trim().replace(/\/+$/, ""))
+    .filter(Boolean);
 
 app.use(
     cors({
         origin: (origin, cb) => {
             // no origin = curl, server-to-server or mobile app requests
             if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
-            cb(new Error("Not allowed by CORS"));
+            console.warn(`CORS blocked origin: ${origin}`);
+            cb(null, false);
         },
     })
 );
@@ -51,7 +56,7 @@ app.use("/api/bookings", bookingRouter)
 app.use("/api/owner", ownerRouter)
 app.use("/api/admin", adminRouter)
 
-//Global error handler
+
 
 //Global error handler
 app.use((err: Error & { status?: number; statusCode?: number }, req: Request, res: Response, next: NextFunction) => {
@@ -64,13 +69,6 @@ app.use((err: Error & { status?: number; statusCode?: number }, req: Request, re
         stack: isProd ? undefined : err.stack,
     });
 });
-// app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-//     console.error("Unhandled Error", err);
-//     res.status(500).json({
-//         message: err.message || "Internal Server Error",
-//         stack: process.env.NODE_ENV === "production" ? undefined : err.stack,
-//     });
-// });
 
 
 app.listen(port, () => {
